@@ -32,21 +32,21 @@ def update_image(imagepath,outputpath,grayscale = False,
         gray_img.putalpha(binary_mask)        #img = ImageOps.grayscale(img)
         gray_img.save(outputpath)
 
-        new_size = tuple(2 * x for x in img.size)
+        new_size = (4 *img.width,4 *img.width)
 
         new_img = Image.new("RGBA", new_size, (0, 0, 0, 150))
         for x in range(1,new_img.width,2):
             for y in range(new_img.height):
                 new_img.putpixel((x,y),(0, 0, 0, 0))
         new_img = new_img.rotate(Angle)
+        #new_img.save(outputpath)
 
-        top =new_img.height/4
-        right = new_img.width/4
+        top =int(new_img.height/2)
+        right = int(new_img.width/2)
 
         new_img = new_img.crop(
             (top,right,top +img.width,right+img.height)
             )
-
 
         for x in range(img.width):
             for y in range(img.height):
@@ -66,6 +66,7 @@ def update_image(imagepath,outputpath,grayscale = False,
                     darkamount = int(darkamount/3)
                     gray_img.putpixel((x, y), (darkamount, darkamount, darkamount, 255- darkamount))
                     outline_img.putpixel((x, y), (0,0, 0, 0))
+        #print(str(outline_img.size) +str(gray_img.size) )
 
         result = Image.alpha_composite(outline_img, gray_img)
         #Case Process
